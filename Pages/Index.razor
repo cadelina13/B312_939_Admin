@@ -1,0 +1,30 @@
+﻿@page "/"
+@using System.Xml;
+@code{
+    string Api = "http://192.168.254.254/api/webserver/token";
+    string htmlResult = string.Empty;
+
+    string rsrq;
+    XmlNodeList _list;
+    protected override async Task OnInitializedAsync()
+    {
+        htmlResult = await api.GetSignalStatus();
+        XmlDocument xmlDoc = new XmlDocument();
+        xmlDoc.LoadXml(htmlResult);
+        var xmlResponse = xmlDoc.GetElementsByTagName("response");
+        _list = xmlResponse[0].ChildNodes;
+    }
+
+
+}
+<code>
+    @htmlResult
+</code>
+
+@if (_list != null && _list.Count > 0)
+{
+    foreach (XmlNode i in _list)
+    {
+        <h1>@i.InnerText</h1>
+    }
+}
